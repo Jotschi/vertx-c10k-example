@@ -48,11 +48,11 @@ java -jar target/vertx-c10k-example-0.0.1-SNAPSHOT.jar
 
 ### Endpoints
 
-* http://localhost:8080/0k
-* http://localhost:8080/4k
-* http://localhost:8080/8k
-* http://localhost:8080/64k
-* http://localhost:8080/sendFile/test
+* http://localhost:8080/0k - Returns empty response
+* http://localhost:8080/4k - Returns 4k response
+* http://localhost:8080/8k - Returns 8k response
+* http://localhost:8080/64k - Return 64k response
+* http://localhost:8080/sendFile/test - Returns response which uses NIO [sendfile()](http://man7.org/linux/man-pages/man2/sendfile.2.html) call.
 
 ## Kernel Options
 
