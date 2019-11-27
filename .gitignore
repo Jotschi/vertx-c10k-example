@@ -2,4 +2,5 @@
 target
 .settings
 .classpath
+.response_cache
 dependency-reduced-pom.xml

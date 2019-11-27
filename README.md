@@ -58,6 +58,8 @@ java -jar target/vertx-c10k-example-0.0.1-SNAPSHOT.jar
 * GET http://localhost:8080/cached/8k - Returns 8k response from caffeine cache
 * GET http://localhost:8080/cached/64k - Return 64k response from caffeine cache
 
+* GET http://localhost:8080/jcs/4k - Return 4k response from JSC disk based cache
+
 * GET http://localhost:8080/sendFile/test - Returns response which uses NIO [sendfile()](http://man7.org/linux/man-pages/man2/sendfile.2.html) call.
 * POST http://localhost:8080/upload - Upload a file, empty response will be returned
 
