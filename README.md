@@ -46,13 +46,18 @@ mvn clean package
 java -jar target/vertx-c10k-example-0.0.1-SNAPSHOT.jar
 ```
 
-### Endpoints
+### API Endpoints
 
-* http://localhost:8080/0k - Returns empty response
-* http://localhost:8080/4k - Returns 4k response
-* http://localhost:8080/8k - Returns 8k response
-* http://localhost:8080/64k - Return 64k response
-* http://localhost:8080/sendFile/test - Returns response which uses NIO [sendfile()](http://man7.org/linux/man-pages/man2/sendfile.2.html) call.
+* GET http://localhost:8080/0k - Returns empty response
+* GET http://localhost:8080/4k - Returns 4k response
+* GET http://localhost:8080/8k - Returns 8k response
+* GET http://localhost:8080/64k - Return 64k response
+* GET http://localhost:8080/sendFile/test - Returns response which uses NIO [sendfile()](http://man7.org/linux/man-pages/man2/sendfile.2.html) call.
+* POST http://localhost:8080/upload - Upload a file, empty response will be returned
+
+### Metrics
+
+* GET http://localhost:8081/metrics - Return micrometer metrics for prometheus
 
 ## Kernel Options
 

@@ -1,5 +1,7 @@
 package de.jotschi.vertx.c10k;
 
+import de.jotschi.vertx.c10k.metric.Metrics;
+import de.jotschi.vertx.c10k.metric.MetricsVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
@@ -8,7 +10,9 @@ public class ServerRunner {
 
 	public static void main(String[] args) {
 		VertxOptions vertxOptions = new VertxOptions();
-		vertxOptions.setPreferNativeTransport(true);
+		vertxOptions
+			.setPreferNativeTransport(true)
+			.setMetricsOptions(Metrics.getOptions());
 
 		Vertx vertx = Vertx.vertx(vertxOptions);
 
@@ -22,8 +26,8 @@ public class ServerRunner {
 
 		DeploymentOptions options = new DeploymentOptions();
 		int nVerticles = Runtime.getRuntime().availableProcessors();
-		System.out.println("Deploying {" + nVerticles + "} verticles");
 		options.setInstances(nVerticles);
+		System.out.println("Deploying {" + nVerticles + "} verticles");
 		vertx.deployVerticle(ServerVerticle.class, options, ch -> {
 			if (ch.failed()) {
 				ch.cause().printStackTrace();
@@ -31,6 +35,8 @@ public class ServerRunner {
 				System.out.println("Server verticles deployed.");
 			}
 		});
+
+		vertx.deployVerticle(new MetricsVerticle());
 
 	}
 

@@ -5,9 +5,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 
 public class ServerVerticle extends AbstractVerticle {
 
@@ -80,6 +82,16 @@ public class ServerVerticle extends AbstractVerticle {
 		router.route("/sendFile/test").handler(rh -> {
 			rh.response().sendFile("test");
 		});
+
+		router.route("/upload").method(HttpMethod.POST).handler(BodyHandler.create());
+		router.route("/upload").method(HttpMethod.POST).handler(rh -> {
+			if (rh.fileUploads().size() == 0) {
+				rh.fail(new RuntimeException("No upload found.."));
+			} else {
+				rh.response().end();
+			}
+		});
+
 		return router;
 	}
 
