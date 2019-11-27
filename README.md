@@ -90,3 +90,30 @@ via [apache benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html)
 ```
 ab -n 200000 -c 10000 http://localhost:8080/4k
 ```
+
+## Example Results
+
+* On Intel i7 7770k @ Linux 4.19.0-5-amd64
+
+```
+ ./wrk -c10000 -d32s -t16 http://localhost:8080/4k
+Running 32s test @ http://localhost:8080/4k
+  16 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    85.68ms   29.71ms   1.03s    75.52%
+    Req/Sec     7.04k     1.27k   19.43k    85.71%
+  3588359 requests in 32.10s, 13.83GB read
+Requests/sec: 111789.39
+Transfer/sec:    441.05MB
+```
+
+## Disclaimer
+
+Please note that the results should not be used as a performance reference.
+The server response is static. The tests are run locally.
+There are many other factors which will affect real world performance.
+
+## Resources
+
+* http://www.kegel.com/c10k.html
+* [Real world HTTP performance benchmarking, lessons learned by Julien Viet](https://www.youtube.com/watch?v=2lzvsyoooTk&list=PLRsbF2sD7JVqPgMvdC-bARnJ9bALLIM3Q)
