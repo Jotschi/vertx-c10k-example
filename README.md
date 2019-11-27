@@ -49,9 +49,15 @@ java -jar target/vertx-c10k-example-0.0.1-SNAPSHOT.jar
 ### API Endpoints
 
 * GET http://localhost:8080/0k - Returns empty response
-* GET http://localhost:8080/4k - Returns 4k response
-* GET http://localhost:8080/8k - Returns 8k response
-* GET http://localhost:8080/64k - Return 64k response
+
+* GET http://localhost:8080/static/4k - Returns fixed 4k response
+* GET http://localhost:8080/static/8k - Returns fixed 8k response
+* GET http://localhost:8080/static/64k - Return fixed 64k response
+
+* GET http://localhost:8080/cached/4k - Returns 4k response from caffeine cache
+* GET http://localhost:8080/cached/8k - Returns 8k response from caffeine cache
+* GET http://localhost:8080/cached/64k - Return 64k response from caffeine cache
+
 * GET http://localhost:8080/sendFile/test - Returns response which uses NIO [sendfile()](http://man7.org/linux/man-pages/man2/sendfile.2.html) call.
 * POST http://localhost:8080/upload - Upload a file, empty response will be returned
 
@@ -96,8 +102,8 @@ ab -n 200000 -c 10000 http://localhost:8080/4k
 * On Intel i7 7770k @ Linux 4.19.0-5-amd64
 
 ```
- ./wrk -c10000 -d32s -t16 http://localhost:8080/4k
-Running 32s test @ http://localhost:8080/4k
+ ./wrk -c10000 -d32s -t16 http://localhost:8080/static/4k
+Running 32s test @ http://localhost:8080/static/4k
   16 threads and 10000 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
     Latency    85.68ms   29.71ms   1.03s    75.52%
