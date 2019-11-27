@@ -88,13 +88,13 @@ sysctl -w net.ipv4.tcp_max_syn_backlog=10000
 via [wrk](https://github.com/wg/wrk)
 
 ```
-./wrk -c10000 -d32s -t8 http://localhost:8080/4k
+./wrk -c10000 -d32s -t8 http://localhost:8080/static/4k
 ```
 
 via [apache benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html)
 
 ```
-ab -n 200000 -c 10000 http://localhost:8080/4k
+ab -n 200000 -c 10000 http://localhost:8080/static/4k
 ```
 
 ## Example Results
