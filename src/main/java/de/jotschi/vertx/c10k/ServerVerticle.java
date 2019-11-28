@@ -11,7 +11,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
@@ -26,6 +25,7 @@ public class ServerVerticle extends AbstractVerticle {
 
 	public static final int SERVER_PORT = 8080;
 	public static final String SERVER_HOST = "localhost";
+	public final Random RANDOM = new Random();
 
 	public static final int n4K = 4 * 1024;
 	public static final int n8K = 8 * 1024;
@@ -145,29 +145,29 @@ public class ServerVerticle extends AbstractVerticle {
 	}
 
 	private Handler<RoutingContext> fromJCSCache() {
-		int random = new Random().nextInt(MAX_RANGE);
 		int len = n4K;
 		return rc -> {
+			int random = RANDOM.nextInt(MAX_RANGE);
 			vertx.executeBlocking((Promise<String> bc) -> {
 				String entry = jcsCache4k.get(random);
 				if (entry != null) {
 					bc.complete(entry);
 				} else {
-					System.out.println("Creating jcs cache entry...");
+					System.out.println("Creating jcs cache entry for {" + random + "}");
 					String str = RandomStringUtils.randomAlphanumeric(len);
 					jcsCache4k.put(random, str);
-					bc.complete(entry);
+					bc.complete(str);
 				}
-			}, false, (AsyncResult<String> rh) -> {
+			}, false, rh -> {
 				rc.response().end(rh.result());
 			});
 		};
 	}
 
 	private Buffer fromCaffeineCache(int len) {
-		int random = new Random().nextInt(MAX_RANGE);
+		int random = RANDOM.nextInt(MAX_RANGE);
 		Function<Integer, Buffer> mapper = rnd -> {
-			System.out.println("Creating caffeine cache entry...");
+			System.out.println("Creating caffeine cache entry for {" + rnd + "}");
 			return createBuffer(len);
 		};
 		switch (len) {
