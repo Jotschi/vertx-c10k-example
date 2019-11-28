@@ -101,7 +101,7 @@ ab -n 200000 -c 10000 http://localhost:8080/static/4k
 
 ## Example Results
 
-* On Intel i7 7770k @ Linux 4.19.0-5-amd64
+* On Intel i7 7700k @ Linux 4.19.0-5-amd64
 
 ```
  ./wrk -c10000 -d32s -t16 http://localhost:8080/static/4k
