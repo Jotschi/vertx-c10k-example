@@ -25,8 +25,8 @@ public class ServerRunner {
 		}
 
 		DeploymentOptions options = new DeploymentOptions();
-		int nVerticles = Runtime.getRuntime().availableProcessors();
-		options.setInstances(nVerticles * 2);
+		int nVerticles = Runtime.getRuntime().availableProcessors() * 2;
+		options.setInstances(nVerticles);
 		System.out.println("Deploying {" + nVerticles + "} verticles");
 		vertx.deployVerticle(ServerVerticle.class, options, ch -> {
 			if (ch.failed()) {

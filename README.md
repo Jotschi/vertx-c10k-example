@@ -35,7 +35,7 @@ vertxOptions.setPreferNativeTransport(true);
 
 ```java
 DeploymentOptions options = new DeploymentOptions();
-int nVerticles = Runtime.getRuntime().availableProcessors();
+int nVerticles = Runtime.getRuntime().availableProcessors() * 2;
 options.setInstances(nVerticles);
 ```
 
