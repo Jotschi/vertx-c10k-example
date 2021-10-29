@@ -1,4 +1,4 @@
-# Vert.x C10K
+# Vert.x C10K - io_uring Transport Example
 
 This example project contains a very basic http server which demonstrates the basics that are need to build a Vert.x server which can handle 10k concurrent connections.
 
@@ -9,7 +9,8 @@ The example program starts Vert.x and deploys multiple http verticles.
 
 Noteworthy aspects:
 
-* The `netty-transport-native-epoll` library adds [epoll support](https://netty.io/wiki/native-transports.html).
+* The `netty-incubator-transport-native-io_uring` library adds [io uring support](https://netty.io/wiki/native-transports.html). This library may need to be build locally from this [GitHub project](https://github.com/netty/netty-incubator-transport-io_uring)
+* The project contains some patched classes to allow Vert.x to use the new io uring transport.
 
 * `HttpServer` options improve connection handling
 
@@ -71,19 +72,37 @@ java -jar target/vertx-c10k-example-0.0.1-SNAPSHOT.jar
 
 ```bash
 # Increase amount of open files. This will allow the creation of more network sockets.
+# Documentation: https://www.kernel.org/doc/Documentation/sysctl/fs.txt
 sysctl -w fs.file-max=110000
 sysctl -w fs.nr_open=110000
 ulimit -n 110000
 
 # Increase tcp buffers
+# Documentation: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
 sysctl -w net.ipv4.tcp_mem="100000000 100000000 100000000"
 
 # Increase socket connection limit
+# Documentation: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
 sysctl -w net.core.somaxconn=10000
 
 # Increase backlog size for tcp connections in SYN state
+# Documentation: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
 sysctl -w net.ipv4.tcp_max_syn_backlog=10000
+
+# Check your maximum for locked-in-memory address space and increase it to avoid `failed to create io_uring ring fd Cannot allocate memory` errors
+# Documentation: https://linux.die.net/man/2/mlockall
+ulimit -l
+
+# Set Hard and Soft Limits (8M is Debian Kernel Default)
+ulimit -S -l 8224602
+ulimit -H -l 8224602
+
+# Optionally increase the maxium of memory map areas
+# The default value is 65536
+# Documentation: https://www.kernel.org/doc/Documentation/sysctl/vm.txt
+sysctl -w vm.max_map_count=262144
 ```
+
 
 ## Tests
 
@@ -109,11 +128,11 @@ ab -n 200000 -c 10000 http://localhost:8080/static/4k
 Running 32s test @ http://localhost:8080/static/4k
   16 threads and 10000 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    99.31ms   46.74ms 435.93ms   68.46%
-    Req/Sec     6.37k   578.54    20.15k    75.24%
-  3247189 requests in 32.10s, 12.51GB read
-Requests/sec: 101156.41
-Transfer/sec:    399.10MB
+    Latency    80.70ms   35.09ms 283.24ms   68.42%
+    Req/Sec     7.80k   648.28    21.30k    73.14%
+  3967178 requests in 32.10s, 15.29GB read
+Requests/sec: 123588.62
+Transfer/sec:    487.60MB
 ```
 
 ## Disclaimer
