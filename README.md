@@ -90,7 +90,7 @@ sysctl -w net.ipv4.tcp_max_syn_backlog=10000
 via [wrk](https://github.com/wg/wrk)
 
 ```
-./wrk -c10000 -d32s -t8 http://localhost:8080/static/4k
+./wrk -c10000 -d32s -t16 http://localhost:8080/static/4k
 ```
 
 via [apache benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html)
@@ -101,18 +101,19 @@ ab -n 200000 -c 10000 http://localhost:8080/static/4k
 
 ## Example Results
 
-* On Intel i7 7700k @ Linux 4.19.0-5-amd64
+* On Intel i7 7700k @ Debian Linux 5.10.0-8-amd64
+* OpenJDK Runtime Environment (build 11.0.12+7-post-Debian-2)
 
 ```
- ./wrk -c10000 -d32s -t16 http://localhost:8080/static/4k
+# wrk -c10000 -d32s -t16 http://localhost:8080/static/4k
 Running 32s test @ http://localhost:8080/static/4k
   16 threads and 10000 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    85.68ms   29.71ms   1.03s    75.52%
-    Req/Sec     7.04k     1.27k   19.43k    85.71%
-  3588359 requests in 32.10s, 13.83GB read
-Requests/sec: 111789.39
-Transfer/sec:    441.05MB
+    Latency    99.31ms   46.74ms 435.93ms   68.46%
+    Req/Sec     6.37k   578.54    20.15k    75.24%
+  3247189 requests in 32.10s, 12.51GB read
+Requests/sec: 101156.41
+Transfer/sec:    399.10MB
 ```
 
 ## Disclaimer
